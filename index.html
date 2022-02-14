@@ -5,54 +5,81 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="Description" content="Put your description here.">
+  <script type="module">
+    import { html, render } from 'lit';
+    import "./src/NasaImageSearch.js";
+</script>
+<link rel="stylesheet" type="text/css" href="style.css">
   <base href="/">
-  <style>
-    html,
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: sans-serif;
-    }
-  </style>
   <title>Lab 4/5</title>
 </head>
 
 <body>
-  <div class="searchArea"></div>
-  <div class="resultsArea"></div>
+      <!-- term -->
+      <div id="top">
 
-  <script type="module">
-    import { html, render } from 'lit';
-    import "./src/NasaImageSearch.js";
+        <div id="heading">
+          <h1>Nasa Image Search</h1>
+        </div>
 
-    render(
-      html`
-      <input type="text" class="searchTerm" value="Moon Landing">
-      <button @click="${getTerm}">Submit</button> 
+        <div id="wrapToCircle">
+        <div class="label">
+          <label class="label" for="termInput">Enter search term:</label>
+          <input name="termInput" type="text" id="searchTerm" value="Moon Landing">
+        </div>
+      <br>
+
+      <!-- index -->
+      <div class="label">
+        <label for="numInput">Page number:</label>
+        <input name="numInput" type="text" id="page_num" value="1" style="width: 30px">
+      </div>
+      <br>
+
+      <!-- start year and end year -->
+      <div class="label">
+        <label for="years">Start year to end year:</label>
+        <input name = "years" id="startYear" type="number" min="1800" max="2200" step="1" value="1800"/>
+        <label for="years">to</label>
+        <input name="years" id="endYear" type="number" min="1800" max="2200" step="1" value="2022"/>
+      </div>
+      <br>  
+
+    </div>
+
+    <div id="button">
+      <button id="search">Search</button>
+    </div>
+      
+    </div>
+
+    <!-- check box -->
+    <div id="check_box">
       <label for="checkbox">Return Data Only</label>
-      <input name="checkbox" type="checkbox" @change="${changeData}">
-      `,
-      document.querySelector('.searchArea')
-    );
+      <input id="checkBox" name="checkbox" type="checkbox" style="width:20px; height:20px;">
+    </div>
 
-    function changeData(){
-      let tag = document.querySelector('nasa-image-search');
-      tag.checked = !tag.checked;
-    }
+      <div id="bottom">
+      <nasa-image-search id="nasa_search_element"></nasa-image-search>   
+      </div>
 
-    function getTerm(){
-      const searchedTerm = document.querySelector(".searchTerm").value;
+      <script>
 
-      render(
-        html`
-          <nasa-image-search term="${searchedTerm}">
-          </nasa-image-search>      
-        `,
-        document.querySelector('.resultsArea')
-      );
+        // event listener for search button
+        document.querySelector("#search").addEventListener("click", e => {
+          document.querySelector("#nasa_search_element").term = document.querySelector("#searchTerm").value;
+          document.querySelector("#nasa_search_element").index = document.querySelector("#page_num").value;
+          document.querySelector("#nasa_search_element").start_year = document.querySelector("#startYear").value;
+          document.querySelector("#nasa_search_element").end_year = document.querySelector("#endYear").value;
+          document.querySelector("#nasa_search_element").getData();
+        });
 
-    }
-  </script>
+        // event listener for check box
+        document.querySelector("#checkBox").addEventListener("change", e=> {
+          let tag = document.querySelector("#nasa_search_element");
+          tag.checked = !tag.checked;
+        })
+      </script>
 </body>
 
 </html>
