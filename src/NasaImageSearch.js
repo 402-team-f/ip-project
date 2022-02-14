@@ -125,7 +125,7 @@ export class NasaImageSearch extends LitElement {
                 ${this.imageData.map(
                   item => html`
                     <div id="list">
-                      <li>
+                      <li style="color:white;">
                         Link: ${item.href}<br />Title: ${item.title}<br />Description:
                         ${item.description}<br />Secondary Creator:
                         ${item.secondary_creator}
