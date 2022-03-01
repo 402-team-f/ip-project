@@ -12,9 +12,12 @@ export class NasaImageSearch extends LitElement {
     this.returnDataOnly = false;
     this.imageData = []; // Stores image search query data
     this.checked = false;
+    // make sure to set some defaults for all values here
   }
 
   // properties that you wish to use as data in HTML, CSS, and the updated life-cycle
+  // use _ or camel case. Whatever convention stick with it though I personally
+  // prefer camel, then reflecting the attribute: "end-year" for a endYear var name
   static get properties() {
     return {
       returnDataOnly: { type: Boolean },
@@ -31,7 +34,16 @@ export class NasaImageSearch extends LitElement {
   // this allows you to react to variables changing and use javascript to perform logic
   updated(changedProperties) {
     changedProperties.forEach((oldValue, propName) => {
+      // this should either fire on ALL changes or none
+      // currently you set term in the demo and then all the other values
+      // at which point you call getData. This causes the data to be requested
+      // 2x instead of once. Either a debounce for the variable changes or
+      // make it be a composite where all values are evaluated based on
+      // any one of them changing. This would simplify your demo code
+      // to something like a updateDate(term,date1,date2,page) or something like that
+
       if (propName === 'term' && this[propName]) {
+        // this.term is the same as saying this[propName]
         if (this.term) {
           this.getData();
         }
@@ -41,6 +53,8 @@ export class NasaImageSearch extends LitElement {
 
   getData() {
     // defined
+    // this will cause issues if there's no start or end year
+    // also the new URL part is fine but not needed
     const file = new URL(
       `https://images-api.nasa.gov/search?q=${this.term}&page=${this.index}&year_start=${this.start_year}&year_end=${this.end_year}&media_type=image`
     );
@@ -82,6 +96,7 @@ export class NasaImageSearch extends LitElement {
 
   // Lit life-cycle; this fires the 1st time the element is rendered on the screen
   // this is a sign it is safe to make calls to this.shadowRoot
+  // remove unused code
   firstUpdated(changedProperties) {
     if (super.firstUpdated) {
       super.firstUpdated(changedProperties);
@@ -90,12 +105,14 @@ export class NasaImageSearch extends LitElement {
 
   // HTMLElement life-cycle, element has been connected to the page / added or moved
   // this fires EVERY time the element is moved
+  // remove unused code
   connectedCallback() {
     super.connectedCallback();
   }
 
   // HTMLElement life-cycle, element has been removed from the page OR moved
   // this fires every time the element moves
+  // remove unused code
   disconnectedCallback() {
     super.disconnectedCallback();
   }
@@ -106,9 +123,14 @@ export class NasaImageSearch extends LitElement {
       :host {
         display: block;
       }
+      /* remove boilerplate if not used */
       :host([name='partner']) {
         color: yellow;
         background-color: black;
+      }
+      /* could have set a lot of those style attributes from accent-card here */
+      accent-card {
+        max-width: 1000px;
       }
     `;
   }
